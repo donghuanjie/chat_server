@@ -3,27 +3,14 @@ import java.io.*;
 import java.net.*;
 import java.math.*;
 
-/** Main Program for Chat Server to be used with Assignment 4.
- *  You must use the program as written without any changes.  Note that this
- *  program requires the following:
- *     		keys.txt where the RSA keys are stored
- *     		SymCipher.java, the interface for the symmetric ciphers
- *     		Substitute.java, the substitution cipher
- *     		Add128.java, the addition cipher
- *   The first two files are provided for you, but you must write the other two, as
- *   well as the client program, yourself.
- *   See more details on these requirements in the assignment description.
- * Adapted from Dr. John Ramirez's CS 1501 Assignment 4
- */
 public class SecureChatServer {
 
 	public static final int PORT = 8765;
 
 	private int MaxUsers;
-	private Socket [] users;         // Need array of Sockets and Threads,
-	private UserThread [] threads;   // one of each per client -- using an
-	private int numUsers;            // ArrayList for these would make less work
-	// for the programmer
+	private Socket [] users;         // Need array of Sockets and Threads
+	private UserThread [] threads;   
+	private int numUsers;            
 	private String StringE, StringD, StringN;
 	private BigInteger E, D, N;
 	Random R;
@@ -33,7 +20,7 @@ public class SecureChatServer {
 		MaxUsers = MaxU;
 		users = new Socket[MaxUsers];
 		threads = new UserThread[MaxUsers];   // Set things up and start
-		numUsers = 0;                         // Server running
+		numUsers = 0;                         
 
 		Scanner inScan = new Scanner(new File("keys.txt"));
 		StringE = inScan.nextLine();
@@ -57,12 +44,7 @@ public class SecureChatServer {
 		}
 	}
 
-	/**  Send current message to all clients (even sender).  This
-	 *     must be synchronized so that chatters do not "interrupt"
-	 *     each other.  For each chatter, get the cipher, then use
-	 *     it to encode the message, and send the result.
-	 * @param msg the message to be sent
-	 */
+
 	public synchronized void SendMsg(String msg)
 	{
 		for (int i = 0; i < numUsers; i++)
