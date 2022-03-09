@@ -5,16 +5,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
-/** Primitive chat client.
- * This client connects to a server so that messages can be typed and forwarded
- * to all other clients.  Try it out in conjunction with ImprovedChatServer.java.
- * You will need to modify / update this program to incorporate the secure
- * elements as specified in the Assignment description.  Note that the PORT used
- * below is not the one required in the assignment -- for your SecureChatClient
- * be sure to change the port that so that it matches the port specified for the
- * secure  server.
- * Adapted from Dr. John Ramirez's CS 1501 Assignment 4
- */
 public class ImprovedChatClient extends JFrame implements Runnable, ActionListener {
 
     public static final int PORT = 5678;

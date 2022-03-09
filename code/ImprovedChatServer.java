@@ -2,14 +2,6 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 
-/**  Simple Chat server (without encryption). The actual server used for
- *  Assignment 4 is similar to this, but with handshaking and encryption
- *  (and a couple other minor improvements) as specified in the Assignment
- *  sheet.  This server (together with ImprovedChatClient) will run as is. Run
- *  them to see how the messages appear and how clients connect and
- *  disconnect.
- *  Adapted from Dr. John Ramirez's CS 1501 Assignment 4
- */
 public class ImprovedChatServer
 {
 
