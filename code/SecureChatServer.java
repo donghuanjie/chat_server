@@ -66,10 +66,10 @@ public class SecureChatServer {
 
 	public synchronized void removeClient(int id, String name)
 	{
-		try                          // Remove a client from the server.  This
-		{                            // also must be synchronized, since we
-			users[id].close();       // could have an inconsistent state if this
-		}                            // is interrupted in the middle
+		try                          // Remove a client from the server.  This also must be synchronized
+		{                            
+			users[id].close();       
+		}                            
 		catch (IOException e)
 		{
 			System.out.println("Already closed");
@@ -83,7 +83,7 @@ public class SecureChatServer {
 			threads[i].setId(i);
 		}
 		numUsers--;
-		SendMsg(name + " has logged off");    // Announce departure
+		SendMsg(name + " has logged off");    
 	}
 
 	private void runServer() throws IOException

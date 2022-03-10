@@ -90,7 +90,7 @@ public class SecureChatClient extends JFrame implements Runnable, ActionListener
 
             outputArea.append("Welcome to the Chat Group, " + myName + "\n");
 
-            inputField = new JTextField("");  // This is where user will type input
+            inputField = new JTextField("");  // user will type input
             inputField.addActionListener(this);
 
             prompt = new JLabel("Type your messages below:");
@@ -100,8 +100,8 @@ public class SecureChatClient extends JFrame implements Runnable, ActionListener
             c.add(prompt, BorderLayout.CENTER);
             c.add(inputField, BorderLayout.SOUTH);
 
-            Thread outputThread = new Thread(this);  // Thread is to receive strings
-            outputThread.start();                    // from Server
+            Thread outputThread = new Thread(this);  // Thread is to receive strings from Server
+            outputThread.start();                    
 
             addWindowListener(
                 new WindowAdapter()
