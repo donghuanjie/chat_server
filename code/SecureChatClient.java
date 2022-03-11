@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 public class SecureChatClient extends JFrame implements Runnable, ActionListener {
 
-    public static final int PORT = 8765;
+    public static final int PORT = 8888;
 
     ObjectInputStream myReader;
     ObjectOutputStream myWriter;
@@ -39,11 +39,10 @@ public class SecureChatClient extends JFrame implements Runnable, ActionListener
             myReader = new ObjectInputStream(connection.getInputStream());
 
             E = (BigInteger) myReader.readObject();
-            System.out.println("E is: " + E); 
+            // System.out.println("E is: " + E); 
             N = (BigInteger) myReader.readObject();
-            System.out.println("N is: " + N);
+            // System.out.println("N is: " + N);
             encType = (String) myReader.readObject();
-            System.out.println("Encoding type is: " + encType);
             System.out.println();
             
             //! create Cipher object
@@ -67,9 +66,9 @@ public class SecureChatClient extends JFrame implements Runnable, ActionListener
             }
 
             byte [] cipherKey = cipher.getKey();
-            System.out.print("Cipher Key generated: ");
-            for (int i = 0; i < cipherKey.length; i++)
-                System.out.print(cipherKey[i] + " ");
+            // System.out.print("Cipher Key generated: ");
+            // for (int i = 0; i < cipherKey.length; i++)
+            //     System.out.print(cipherKey[i] + " ");
             
             System.out.println();
             BigInteger bigKey = new BigInteger(1, cipherKey);
@@ -79,16 +78,16 @@ public class SecureChatClient extends JFrame implements Runnable, ActionListener
 
 
             //------------------------------------------- Window ----------------------------------------------------------
-            this.setTitle(myName);      // Set title to identify chatter
+            this.setTitle(myName + "'s chatbox");      // Set title to identify chatter
             myWriter.writeObject(cipher.encode(myName));   
             myWriter.flush();
 
             Box b = Box.createHorizontalBox();  // Set up graphical environment for
-            outputArea = new JTextArea(8, 30);  // user
+            outputArea = new JTextArea(14, 30);  // user
             outputArea.setEditable(false);
             b.add(new JScrollPane(outputArea));
 
-            outputArea.append("Welcome to the Chat Group, " + myName + "\n");
+            outputArea.append("Welcome to ECS 251 Chat Group, " + myName + "\n");
 
             inputField = new JTextField("");  // user will type input
             inputField.addActionListener(this);
@@ -124,7 +123,7 @@ public class SecureChatClient extends JFrame implements Runnable, ActionListener
                 }
             );
 
-            setSize(500, 200);
+            setSize(600, 300);
             setVisible(true);
             
         }
@@ -147,11 +146,12 @@ public class SecureChatClient extends JFrame implements Runnable, ActionListener
                 byte[] deBytes = currMsg.getBytes(StandardCharsets.UTF_8); 
 			    outputArea.append(currMsg+"\n");
 			    
-                printDeMessage(enBytes, deBytes, currMsg);  //For each message that is decrypted, output the information to the console.
+                System.out.println("message received");
+                // printDeMessage(enBytes, deBytes, currMsg);  //For each message that is decrypted, output the information to the console.
             }
             catch (Exception e)
             {
-                System.out.println(e +  ", closing client!");
+                System.out.println("Client closing successfully!");
                 break;
             }
         }
@@ -172,7 +172,8 @@ public class SecureChatClient extends JFrame implements Runnable, ActionListener
                 myWriter.writeObject(enBytes);     // Add name and send it to Server
                 myWriter.flush();
 
-                printEnMessage(enBytes, msgBytes, finalMsg);
+                System.out.println("message sent");
+                // printEnMessage(enBytes, msgBytes, finalMsg);
             }
         }
         catch(IOException exception)
@@ -182,56 +183,56 @@ public class SecureChatClient extends JFrame implements Runnable, ActionListener
                 
     }
 
-    public void printDeMessage(byte[] enBytes, byte[] deBytes, String message)
-    {
-        try{
-            Thread.sleep(100);       
-        }catch(InterruptedException ex){
-            ex.printStackTrace();
-        }
-        System.out.println();
-        System.out.println("------------------------------Decryption Information----------------------------------");
-        System.out.println("The array of bytes received: ");  
-        System.out.print("    ");     
-        for (int i = 0; i < enBytes.length; i++)
-            System.out.print(enBytes[i] + " ");
-        System.out.println("\n");
+    // public void printDeMessage(byte[] enBytes, byte[] deBytes, String message)
+    // {
+    //     try{
+    //         Thread.sleep(100);       
+    //     }catch(InterruptedException ex){
+    //         ex.printStackTrace();
+    //     }
+    //     System.out.println();
+    //     System.out.println("------------------------------Decryption Information----------------------------------");
+    //     System.out.println("The array of bytes received: ");  
+    //     System.out.print("    ");     
+    //     for (int i = 0; i < enBytes.length; i++)
+    //         System.out.print(enBytes[i] + " ");
+    //     System.out.println("\n");
 
-        System.out.println("The decrypted array of bytes: "); 
-        System.out.print("    ");     
-        for (int i = 0; i < deBytes.length; i++)
-            System.out.print(deBytes[i] + " ");
-        System.out.println("\n");
+    //     System.out.println("The decrypted array of bytes: "); 
+    //     System.out.print("    ");     
+    //     for (int i = 0; i < deBytes.length; i++)
+    //         System.out.print(deBytes[i] + " ");
+    //     System.out.println("\n");
 
-        System.out.println("The corresponding String: ");
-        System.out.print("    "); 
-        System.out.println(message);
-        System.out.println("--------------------------------------------------------------------------------------");
-        System.out.println();  
-    } 
+    //     System.out.println("The corresponding String: ");
+    //     System.out.print("    "); 
+    //     System.out.println(message);
+    //     System.out.println("--------------------------------------------------------------------------------------");
+    //     System.out.println();  
+    // } 
 
-    public void printEnMessage(byte[] enBytes, byte[] msgBytes, String message)
-    {
-        System.out.println();
-        System.out.println("------------------------------Encryption Information----------------------------------");
-        System.out.println("The original String message: ");
-        System.out.print("    ");      
-        System.out.println(message);
-        System.out.println();
+    // public void printEnMessage(byte[] enBytes, byte[] msgBytes, String message)
+    // {
+    //     System.out.println();
+    //     System.out.println("------------------------------Encryption Information----------------------------------");
+    //     System.out.println("The original String message: ");
+    //     System.out.print("    ");      
+    //     System.out.println(message);
+    //     System.out.println();
 
-	    System.out.println("The corresponding array of bytes: "); 
-        System.out.print("    ");      
-        for (int i = 0; i < msgBytes.length; i++)
-		    System.out.print(msgBytes[i] + " ");
-	    System.out.println("\n");
+	//     System.out.println("The corresponding array of bytes: "); 
+    //     System.out.print("    ");      
+    //     for (int i = 0; i < msgBytes.length; i++)
+	// 	    System.out.print(msgBytes[i] + " ");
+	//     System.out.println("\n");
 
-	    System.out.println("The encrypted array of bytes: "); 
-        System.out.print("    ");    
-	    for (int i = 0; i < enBytes.length; i++)
-		    System.out.print(enBytes[i] + " ");
-        System.out.println();  
-	    System.out.println("--------------------------------------------------------------------------------------");
-    } 
+	//     System.out.println("The encrypted array of bytes: "); 
+    //     System.out.print("    ");    
+	//     for (int i = 0; i < enBytes.length; i++)
+	// 	    System.out.print(enBytes[i] + " ");
+    //     System.out.println();  
+	//     System.out.println("--------------------------------------------------------------------------------------");
+    // } 
 
     public static void main(String [] args)
     {

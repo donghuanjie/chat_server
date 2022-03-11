@@ -5,7 +5,7 @@ import java.math.*;
 
 public class SecureChatServer {
 
-	public static final int PORT = 8765;
+	public static final int PORT = 8888;
 
 	private int MaxUsers;
 	private Socket [] users;         // Need array of Sockets and Threads
@@ -30,26 +30,26 @@ public class SecureChatServer {
 		D = new BigInteger(StringD);
 		N = new BigInteger(StringN);
 		R = new Random();
-		System.out.println("My E: " + E);
-		System.out.println("My D: " + D);
-		System.out.println("My N: " + N);
+		// System.out.println("My E: " + E);
+		// System.out.println("My D: " + D);
+		// System.out.println("My N: " + N);
 		try
 		{
-			System.out.println("Server starting up");
+			System.out.println("Server starting up...");
 			runServer();
 		}
 		catch (Exception e)
 		{
-			System.out.println("Problem with server");
+			System.out.println("Problem starting the server");
 		}
 	}
 
 
 	public synchronized void SendMsg(String msg)
 	{
+		System.out.println("Message received by server.");
 		for (int i = 0; i < numUsers; i++)
 		{
-			System.out.println("Sending to user " + i);
 			ObjectOutputStream currWriter = threads[i].getWriter();
 			SymCipher currCipher = threads[i].getCipher();
 			byte [] sendmsg = currCipher.encode(msg);
@@ -66,7 +66,7 @@ public class SecureChatServer {
 
 	public synchronized void removeClient(int id, String name)
 	{
-		try                          // Remove a client from the server.  This also must be synchronized
+		try 
 		{                            
 			users[id].close();       
 		}                            
@@ -76,11 +76,11 @@ public class SecureChatServer {
 		}
 		users[id] = null;
 		threads[id] = null;
-		for (int i = id; i < numUsers-1; i++)   // Shift remaining clients in
-		{                                       // array up one position
+		for (int i = id; i < numUsers-1; i++)   // Shift remaining clients to 1 place left
+		{                                       
 			users[i] = users[i+1];
 			threads[i] = threads[i+1];
-			threads[i].setId(i);
+			threads[i].setId(i);	// id will change when a previous chatter quits, id is its index number
 		}
 		numUsers--;
 		SendMsg(name + " has logged off");    
@@ -130,7 +130,7 @@ public class SecureChatServer {
 						bigKey = bigKey.modPow(D, N);
 						System.out.println("Decrypted key: " + bigKey);
 						byte [] byteKey = bigKey.toByteArray();
-						System.out.println("Byte array length: " + byteKey.length);
+						// System.out.println("Byte array length: " + byteKey.length);
 						SymCipher cipher = null;
 
 						// Since the key is sent from the client as a positive BigInteger,
@@ -160,9 +160,9 @@ public class SecureChatServer {
 							cipher = new Substitute(byteKey);
 						}
 
-						System.out.println("Key: ");
-						for (int i = 0; i < byteKey.length; i++)
-							System.out.print(byteKey[i] + " ");
+						// System.out.println("Key: ");
+						// for (int i = 0; i < byteKey.length; i++)
+						// 	System.out.print(byteKey[i] + " ");
 						System.out.println();
 
 						// Get the Client's name (note that this is encoded).  Then
@@ -171,9 +171,8 @@ public class SecureChatServer {
 						byte [] newBytes = (byte []) tempReader.readObject();
 						String newName = cipher.decode(newBytes);
 
-						newSocket.setSoTimeout(0);  // A 0 value for the timeout is actually
-						// no timeout -- once the client is correctly connected there
-						// can be an arbitrary delay between messages.
+						newSocket.setSoTimeout(0);  
+
 						synchronized (this)
 						{
 							users[numUsers] = newSocket;
@@ -212,19 +211,17 @@ public class SecureChatServer {
 		}   // try
 		catch (Exception e)
 		{
-			System.out.println("Something went wrong " + e);
+			System.out.println("Something wrong starting server: " + e);
 		}
 		finally
 		{
-			System.out.println("Server shutting down");
+			System.out.println("Server shutting down!");
 
 		}
-	}  //  end of runServer method
+	}  
 
-	// Below is the class used by the server to keep track of the clients.  Each
-	// client is a new UserThread object, with the data shown.  Note that the cipher
-	// being used is encapsulated within the UserThread, so that each client can have
-	// a different encryption scheme, as long as it satisfies the SymCipher interface.
+	// UserThread class is used by the server to keep track of the clients.  
+	// The cipher being used is encapsulated within the UserThread, each client can have a different encryption method.
 
 	private class UserThread extends Thread
 	{
@@ -264,7 +261,7 @@ public class SecureChatServer {
 
 		public synchronized void setId(int newId)
 		{
-			myId = newId;   // id may change when a previous chatter quits
+			myId = newId;   // id is the array index number, will change if somebody leaves the server
 		}
 
 		// While running, each UserThread will get the next message from its
