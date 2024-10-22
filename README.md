@@ -1,1 +1,1 @@
-# An easy secure chat server.
+# A tiny secure chat server.
